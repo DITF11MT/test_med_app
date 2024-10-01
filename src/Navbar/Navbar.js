@@ -1,12 +1,38 @@
-// eslint-disable-next-line
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 function NavBar() {
+    const [userName, setUserName] = useState(null);
+    const navigate = useNavigate();
+
+    // Check sessionStorage for the logged-in user's name
+    useEffect(() => {
+        const storedName = sessionStorage.getItem('name');
+        if (storedName) {
+            setUserName(storedName);
+        }
+    }, []);
+
+    // Function to handle user logout
+    const handleLogout = () => {
+        // Clear session storage
+        sessionStorage.removeItem('auth-token');
+        sessionStorage.removeItem('name');
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('phone');
+
+        // Redirect to home page after logout
+        setUserName(null); // Reset the user state
+        navigate('/'); // Navigate to the home page
+        window.location.reload(); // Reload the page to update the navbar
+    };
+
     return (
         <div>
             <nav>
                 <div className="nav__logo">
-                    <a href="/">
+                    <Link to="/">
                         StayHealthy
                         <svg xmlns="http://www.w3.org/2000/svg" height="26" width="26" viewBox="0 0 1000 1000" style={{ fill: '#3685fb' }}>
                             <title>Doctor With Stethoscope SVG icon</title>
@@ -18,7 +44,7 @@ function NavBar() {
                                 </g>
                             </g>
                         </svg>
-                    </a>
+                    </Link>
                     <span>.</span>
                 </div>
                 <div className="nav__icon" onClick={handleClick}>
@@ -27,21 +53,41 @@ function NavBar() {
 
                 <ul className="nav__links active">
                     <li className="link">
-                        <a href="../Landing_Page/LandingPage.html">Home</a>
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li className="link">
+                        <Link to="/instant-consultation">Instant Consultation</Link>
                     </li>
                     <li className="link">
                         <a href="#">Appointments</a>
                     </li>
-                    <li className="link">
-                        <a href="../Sign_Up/Sign_Up.html">
-                            <button className="btn1">Sign Up</button>
-                        </a>
-                    </li>
-                    <li className="link">
-                        <a href="../Login/Login.html">
-                            <button className="btn1">Login</button>
-                        </a>
-                    </li>
+
+                    {/* Conditional rendering based on whether the user is logged in */}
+                    {userName ? (
+                        <>
+                            <li className="link">
+                                <span>Welcome, {userName}</span>
+                            </li>
+                            <li className="link">
+                                <button className="btn1" onClick={handleLogout}>
+                                    Logout
+                                </button>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li className="link">
+                                <Link to="/sign_up">
+                                    <button className="btn1">Sign Up</button>
+                                </Link>
+                            </li>
+                            <li className="link">
+                                <Link to="/login">
+                                    <button className="btn1">Login</button>
+                                </Link>
+                            </li>
+                        </>
+                    )}
                 </ul>
             </nav>
         </div>
