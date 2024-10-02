@@ -10,6 +10,9 @@ import LandingPage from './Landing_Page/LandingPage'; // Assuming LandingPage is
 import Login from './Login/Login'; // Assuming Login.js is in the Login folder
 import Sign_Up from './Sign_Up/Sign_Up'; // Assuming Sign_Up.js is in the Sign_Up folder
 import InstantConsultation from './InstantConsultationBooking/InstantConsultation'
+import Notification from './Notification/Notification';
+import ProfileForm from './ProfileForm/ProfileForm';
+import ReportsLayout from './ReportsLayout/ReportsLayout';
 // Function component for the main App
 function App() {
 
@@ -28,6 +31,10 @@ function App() {
                     <Route path="/login" element={<Login />} />     {/* Login page */}
                     <Route path="/sign_up" element={<Sign_Up />} /> {/* Sign Up page */}
                     <Route path="/instant-consultation" element={<InstantConsultation />} />
+                    <Route path="/notification" element={<Notification/>}/> 
+                    <Route path="/profile" element={<ProfileForm/>}/> 
+                    <Route path="/reports" element={<ReportsLayout/>}/> 
+
 
                     {/* Add other routes as needed */}
                 </Routes>

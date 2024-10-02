@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
+import ProfileCard from '../ProfileCard/ProfileCard'; // Import ProfileCard component
 
 function NavBar() {
     const [userName, setUserName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [showProfile, setShowProfile] = useState(false); // State to toggle profile dropdown
     const navigate = useNavigate();
 
-    // Check sessionStorage for the logged-in user's name
+    // Check sessionStorage for the logged-in user's name and email
     useEffect(() => {
         const storedName = sessionStorage.getItem('name');
+        const storedEmail = sessionStorage.getItem('email');
         if (storedName) {
             setUserName(storedName);
+            setEmail(storedEmail); // Fetch and set email
         }
     }, []);
 
@@ -22,10 +27,16 @@ function NavBar() {
         sessionStorage.removeItem('email');
         sessionStorage.removeItem('phone');
 
-        // Redirect to home page after logout
-        setUserName(null); // Reset the user state
-        navigate('/'); // Navigate to the home page
-        window.location.reload(); // Reload the page to update the navbar
+        // Reset the user state and navigate to home page after logout
+        setUserName(null);
+        setEmail(null);
+        navigate('/');
+        window.location.reload();
+    };
+
+    // Function to toggle profile visibility
+    const handleProfileClick = () => {
+        setShowProfile(!showProfile);
     };
 
     return (
@@ -65,7 +76,7 @@ function NavBar() {
                     {/* Conditional rendering based on whether the user is logged in */}
                     {userName ? (
                         <>
-                            <li className="link">
+                            <li className="link" onClick={handleProfileClick}>
                                 <span>Welcome, {userName}</span>
                             </li>
                             <li className="link">
@@ -73,6 +84,13 @@ function NavBar() {
                                     Logout
                                 </button>
                             </li>
+
+                            {/* Conditionally render ProfileCard */}
+                            {showProfile && (
+                                <div className="profile-dropdown">
+                                    <ProfileCard userName={userName} email={email} />
+                                </div>
+                            )}
                         </>
                     ) : (
                         <>
